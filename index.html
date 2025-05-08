@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laporan PKL - Farhan Ardiansyah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f9f9f9;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    textarea, input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #2d89ef;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 30px;
+      white-space: pre-wrap;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    #fotoPreview {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #fotoPreview img {
+      max-width: 200px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Laporan PKL</h1>
+  <h2>Farhan Ardiansyah - XI TKJ - SMK PGRI 1 Kota Blitar</h2>
+
+  <form id="pklForm">
+    <label for="judul">Judul Laporan:</label>
+    <input type="text" id="judul" name="judul" required />
+
+    <label for="lokasi">Tempat PKL:</label>
+    <input type="text" id="lokasi" name="lokasi" required />
+
+    <label for="kegiatan">Kegiatan yang Dilakukan:</label>
+    <textarea id="kegiatan" name="kegiatan" rows="5" required></textarea>
+
+    <label for="kesimpulan">Kesimpulan:</label>
+    <textarea id="kesimpulan" name="kesimpulan" rows="3" required></textarea>
+
+    <label for="foto">Upload Foto Kegiatan (bisa lebih dari satu):</label>
+    <input type="file" id="foto" name="foto" accept="image/*" multiple />
+
+    <button type="button" onclick="generateLaporan()">Buat Laporan</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    function generateLaporan() {
+      const judul = document.getElementById('judul').value;
+      const lokasi = document.getElementById('lokasi').value;
+      const kegiatan = document.getElementById('kegiatan').value;
+      const kesimpulan = document.getElementById('kesimpulan').value;
+      const fotoFiles = document.getElementById('foto').files;
+
+      const laporanText = `
+LAPORAN PKL
+
+Nama       : Farhan Ardiansyah
+Kelas      : XI TKJ
+Sekolah    : SMK PGRI 1 Kota Blitar
+
+Judul Laporan:
+${judul}
+
+Tempat PKL:
+${lokasi}
+
+Kegiatan yang Dilakukan:
+${kegiatan}
+
+Kesimpulan:
+${kesimpulan}
+      `;
+
+      const output = document.getElementById('output');
+      output.innerHTML = `<pre>${laporanText}</pre>`;
+
+      if (fotoFiles.length > 0) {
+        const previewDiv = document.createElement("div");
+        previewDiv.id = "fotoPreview";
+        output.appendChild(document.createElement("hr"));
+        output.appendChild(document.createElement("h3")).innerText = "Foto Kegiatan:";
+        output.appendChild(previewDiv);
+
+        for (let i = 0; i < fotoFiles.length; i++) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            previewDiv.appendChild(img);
+          }
+          reader.readAsDataURL(fotoFiles[i]);
+        }
+      }
+
+      setTimeout(() => {
+        window.print();
+      }, 500); // beri waktu gambar muncul sebelum cetak
+    }
+  </script>
+</body>
+</html>
